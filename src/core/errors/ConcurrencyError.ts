@@ -1,4 +1,8 @@
-// Version Mismatch Error
+/* 
+Version Mismatch Error
+Write/append step:
+    - stream exists but version changed unexpectedly -> ConcurrencyError
+*/
 export class ConcurrencyError extends Error {
     constructor(
       public aggregateId: string,
