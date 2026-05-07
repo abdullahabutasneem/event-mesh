@@ -1,0 +1,66 @@
+import {Aggregate} from "../../../core/aggregate/Aggregate";
+import {DomainEvent} from "../../../core/event/DomainEvent";
+import { nanoid } from "nanoid";
+
+export interface OrderItem {
+    productId: string;
+    quantity: number;
+}
+
+export class Order extends Aggregate {
+    private status: 'pending' | 'shipped' | 'cancelled' = 'pending';
+    private _id: string = nanoid();
+
+    static place(customerId: string, items: OrderItem[]): Order {
+        const order = new Order()
+        order.apply({
+            id: nanoid(),
+            type: 'OrderPlaced',
+            aggregateId: order._id,
+            aggregateType: 'Order',
+            version: 0,
+            occurredAt: new Date(),
+            payload: {
+                customerId,
+                items,
+            },
+            metadata: {
+                correlationId: nanoid(),
+                causationId: nanoid(),
+            }
+        })
+        return order
+    }
+    
+    ship(): void {
+        if (this.status !== 'pending') {
+            throw new Error('Only pending orders can be shipped')
+        }
+        this.apply({
+            id: nanoid(),
+            type: 'OrderShipped',
+            aggregateId: this._id,
+            aggregateType: 'Order',
+            version: this.version + 1,
+            occurredAt: new Date(),
+            payload: {},
+            metadata: {
+                correlationId: nanoid(),
+                causationId: nanoid(),
+            }
+        })
+    }
+
+    protected when(event: DomainEvent): void {
+        if (event.type === 'OrderPlaced')
+            this.status = 'pending' 
+        if (event.type === 'OrderShipped') 
+            this.status = 'shipped'
+        if (event.type === 'OrderCancelled')
+            this.status = 'cancelled'
+    }
+
+    getId() {
+        return this._id
+    }
+}
