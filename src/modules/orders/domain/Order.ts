@@ -51,6 +51,32 @@ export class Order extends Aggregate {
         })
     }
 
+    cancel(reason: string): void {
+        if (this.status === 'shipped') {
+            throw new Error('Shipped orders cannot be cancelled')
+        }
+        if (this.status === 'cancelled') {
+            throw new Error('Order is already cancelled')
+        }
+        this.apply({
+            id: nanoid(),
+            type: 'OrderCancelled',
+            aggregateId: this._id,
+            aggregateType: 'Order',
+            version: this.version + 1,
+            occurredAt: new Date(),
+            payload: { reason },
+            metadata: {
+                correlationId: nanoid(),
+                causationId: nanoid(),
+            }
+        })
+    }
+
+    getStatus() {
+        return this.status
+    }
+
     protected when(event: DomainEvent): void {
         if (event.type === 'OrderPlaced')
             this.status = 'pending' 
