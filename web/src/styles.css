@@ -1,0 +1,153 @@
+/*
+Hand-rolled CSS — no Tailwind, no UI kit. Easier to read and explain.
+Keep variables centralised at the top so theme tweaks are one-line.
+*/
+
+:root {
+  --bg: #0f172a;
+  --surface: #1e293b;
+  --surface-2: #334155;
+  --border: #475569;
+  --text: #e2e8f0;
+  --muted: #94a3b8;
+  --accent: #38bdf8;
+  --accent-hover: #0ea5e9;
+  --success: #4ade80;
+  --warn: #facc15;
+  --danger: #f87171;
+  --radius: 8px;
+}
+
+* { box-sizing: border-box; }
+
+html, body, #root {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { color: var(--accent-hover); }
+
+.container {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 24px 20px;
+}
+
+header.app-header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 16px 20px;
+}
+header.app-header .inner {
+  max-width: 920px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+header.app-header h1 {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+header.app-header nav {
+  display: flex;
+  gap: 16px;
+  font-size: 0.95rem;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin-bottom: 16px;
+}
+
+input, button, select {
+  font: inherit;
+}
+
+input[type=text], input[type=number] {
+  background: var(--surface-2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 8px 10px;
+  width: 100%;
+}
+input:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+
+label {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.row {
+  display: flex;
+  gap: 12px;
+  align-items: flex-end;
+  margin-bottom: 12px;
+}
+.row > * { flex: 1; }
+
+button.btn {
+  background: var(--accent);
+  color: #0b1220;
+  border: none;
+  border-radius: var(--radius);
+  padding: 9px 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+button.btn:hover:not(:disabled) { background: var(--accent-hover); }
+button.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+button.btn.secondary { background: var(--surface-2); color: var(--text); }
+button.btn.danger    { background: var(--danger); color: #1f0a0a; }
+button.btn.danger:hover:not(:disabled) { background: #ef4444; }
+
+.status {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.status.pending   { background: rgba(250,204,21,0.15); color: var(--warn); }
+.status.shipped   { background: rgba(74,222,128,0.15); color: var(--success); }
+.status.cancelled { background: rgba(248,113,113,0.15); color: var(--danger); }
+
+.error {
+  background: rgba(248,113,113,0.12);
+  border: 1px solid var(--danger);
+  color: var(--danger);
+  padding: 10px 12px;
+  border-radius: var(--radius);
+  margin-bottom: 12px;
+  font-size: 0.9rem;
+}
+
+.muted { color: var(--muted); font-size: 0.9rem; }
+
+ul.plain { list-style: none; padding: 0; margin: 0; }
+ul.plain li { padding: 8px 0; border-bottom: 1px solid var(--border); }
+ul.plain li:last-child { border-bottom: none; }
+
+code, pre {
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  background: var(--surface-2);
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-size: 0.85em;
+}
