@@ -78,6 +78,10 @@ export class Order extends Aggregate {
     }
 
     protected when(event: DomainEvent): void {
+        // Keep aggregate identity aligned with the event stream being replayed.
+        // Without this, rehydrated orders may emit follow-up events to a random id.
+        this._id = event.aggregateId
+
         if (event.type === 'OrderPlaced')
             this.status = 'pending' 
         if (event.type === 'OrderShipped') 
