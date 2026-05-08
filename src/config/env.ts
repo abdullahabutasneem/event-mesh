@@ -1,5 +1,8 @@
-import "dotenv/config";
+import { config as loadEnv } from "dotenv";
 import { cleanEnv, str, port } from "envalid";
+
+// Prefer project-local .env values over machine-level env vars for local runs.
+loadEnv({ override: true });
 
 export const env = cleanEnv(process.env, {
   PORT: port({ default: 3000 }),
